@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle de Receta - Recetas en Casa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #ff914d;
+      --primary-dark: #ff7a26;
+      --accent-color: #4cb050;
+      --gold-color: #f39c12;
+      --gold-dark: #e67e22;
+      --text-color: #333;
+      --light-gray: #f5f5f5;
+      --white: #ffffff;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background-color: var(--light-gray);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: white;
+      padding: 1.2rem 5%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 8px 12px;
+      border-radius: 20px;
+    }
+
+    nav a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .contenido {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 5%;
+    }
+
+    /* Banner de navegación mejorado */
+    .breadcrumb {
+      background: linear-gradient(135deg, var(--white), #fef9e7);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(243, 156, 18, 0.1);
+      border: 1px solid rgba(243, 156, 18, 0.1);
+    }
+
+    .breadcrumb a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--gold-color);
+    }
+
+    .breadcrumb span {
+      color: #666;
+      margin: 0 0.5rem;
+    }
+
+    /* Contenedor principal mejorado */
+    .receta-container {
+      background-color: var(--white);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .receta-container:hover {
+      border-color: var(--gold-color);
+      box-shadow: 0 12px 35px rgba(243, 156, 18, 0.15);
+    }
+
+    /* Imagen de receta mejorada */
+    .receta-imagen {
+      width: 100%;
+      height: 350px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .receta-imagen::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 100%);
+    }
+
+    .receta-imagen::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--gold-color));
+    }
+
+    /* Información de receta mejorada */
+    .receta-info {
+      padding: 2.5rem;
+    }
+
+    .receta-encabezado {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .receta-titulo-container {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .receta-titulo {
+      font-size: 2.5rem;
+      background: linear-gradient(45deg, var(--primary-color), var(--gold-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .categoria-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary-color), var(--gold-color));
+      color: white;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+    }
+
+    .tiempo-container {
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tiempo {
+      display: flex;
+      align-items: center;
+      color: #777;
+      background: linear-gradient(135deg, #f8f9fa, #fff);
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border: 1px solid rgba(243, 156, 18, 0.2);
+    }
+
+    .tiempo i {
+      margin-right: 8px;
+      color: var(--gold-color);
+      font-size: 1.1rem;
+    }
+
+    .autor {
+      color: #666;
+      font-style: italic;
+      margin-top: 1rem;
+      padding: 12px 16px;
+      background: rgba(243, 156, 18, 0.1);
+      border-radius: 8px;
+      border-left: 4px solid var(--gold-color);
+    }
+
+    /* Acciones mejoradas */
+    .receta-acciones {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-accion {
+      background: linear-gradient(135deg, var(--accent-color), #45a049);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(76, 176, 80, 0.3);
+    }
+
+    .btn-accion:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(76, 176, 80, 0.4);
+    }
+
+    .btn-accion.guardar {
+      background: linear-gradient(135deg, var(--primary-color), var(--gold-color));
+      box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+    }
+
+    .btn-accion.guardar:hover {
+      box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+    }
+
+    .btn-accion:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Secciones mejoradas */
+    .seccion-receta {
+      margin-top: 3rem;
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    .seccion-receta:nth-child(2) { animation-delay: 0.2s; }
+    .seccion-receta:nth-child(3) { animation-delay: 0.4s; }
+
+    .seccion-titulo {
+      background: linear-gradient(45deg, var(--primary-color), var(--gold-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      padding-bottom: 12px;
+      border-bottom: 3px solid;
+      border-image: linear-gradient(90deg, var(--primary-color), var(--gold-color)) 1;
+      position: relative;
+    }
+
+    .seccion-titulo::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-color), var(--gold-color));
+    }
+
+    /* Ingredientes mejorados */
+    .ingredientes-lista {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+      list-style-type: none;
+    }
+
+    .ingrediente-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #f8f9fa, #fff);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(243, 156, 18, 0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .ingrediente-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(243, 156, 18, 0.2);
+      border-color: var(--gold-color);
+    }
+
+    .ingrediente-item::before {
+      content: "✓";
+      color: var(--accent-color);
+      font-weight: bold;
+      margin-right: 12px;
+      font-size: 1.2rem;
+      width: 20px;
+      height: 20px;
+      background: rgba(76, 176, 80, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Instrucciones mejoradas */
+    .instrucciones-lista {
+      list-style-type: none;
+      counter-reset: instruccion;
+    }
+
+    .instruccion-item {
+      position: relative;
+      margin-bottom: 24px;
+      padding: 20px 20px 20px 60px;
+      background: linear-gradient(135deg, #f8f9fa, #fff);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(243, 156, 18, 0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .instruccion-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(243, 156, 18, 0.15);
+      border-color: var(--gold-color);
+    }
+
+    .instruccion-item::before {
+      counter-increment: instruccion;
+      content: counter(instruccion);
+      position: absolute;
+      left: 16px;
+      top: 20px;
+      background: linear-gradient(135deg, var(--primary-color), var(--gold-color));
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+    }
+
+    /* Botón volver mejorado */
+    .btn-volver {
+      background: linear-gradient(135deg, #6c757d, #5a6268);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 3rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+    }
+
+    .btn-volver:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+      background: linear-gradient(135deg, #5a6268, #495057);
+    }
+
+    /* Estados mejorados */
+    .not-found, #cargando {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(135deg, var(--white), #fef9e7);
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(243, 156, 18, 0.08);
+      border: 1px solid rgba(243, 156, 18, 0.1);
+    }
+
+    .not-found h2, #cargando h2 {
+      background: linear-gradient(45deg, var(--primary-color), var(--gold-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .not-found i {
+      font-size: 4rem;
+      background: linear-gradient(45deg, var(--gold-color), var(--gold-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    #cargando i {
+      font-size: 3rem;
+      background: linear-gradient(45deg, var(--primary-color), var(--gold-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    /* Footer mejorado */
+    footer {
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: white;
+      text-align: center;
+      padding: 2.5rem;
+      margin-top: 4rem;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+    }
+
+    footer p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* Animaciones */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      nav a {
+        margin: 0;
+      }
+
+      .receta-titulo {
+        font-size: 2rem;
+      }
+
+      .receta-encabezado {
+        flex-direction: column;
+      }
+      
+      .receta-acciones {
+        margin-top: 1rem;
+        width: 100%;
+      }
+
+      .btn-accion {
+        flex: 1;
+        justify-content: center;
+      }
+      
+      .ingredientes-lista {
+        grid-template-columns: 1fr;
+      }
+
+      .instruccion-item {
+        padding-left: 50px;
+      }
+
+      .instruccion-item::before {
+        width: 28px;
+        height: 28px;
+        left: 12px;
+      }
+
+      .contenido {
+        padding: 1rem 3%;
+      }
+
+      .receta-info {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <h1>Recetas en Casa</h1>
+      <nav>
+        <a href="home.html">Inicio</a>
+        <a href="misRecetas.html">Mis Recetas</a>
+        <a href="favoritos.html">Favoritos</a>
+        <a href="index.html">Salir</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="contenido">
+    <!-- Breadcrumb de navegación -->
+    <div class="breadcrumb" id="breadcrumb" style="display: none;">
+      <a href="#" id="breadcrumb-link">
+        <i class="fas fa-arrow-left"></i> Volver a <span id="breadcrumb-text">Recetas</span>
+      </a>
+    </div>
+
+    <!-- Este div se mostrará cuando se cargue la receta -->
+    <div id="receta-detalle" style="display: none;">
+      <div class="receta-container">
+        <div class="receta-imagen" id="receta-imagen"></div>
+        <div class="receta-info">
+          <div class="receta-encabezado">
+            <div class="receta-titulo-container">
+              <h1 class="receta-titulo" id="receta-nombre"></h1>
+              <div>
+                <span class="categoria-tag" id="receta-categoria"></span>
+              </div>
+              <div class="tiempo-container">
+                <span class="tiempo">
+                  <i class="fas fa-clock"></i> 
+                  <span id="receta-tiempo"></span> minutos
+                </span>
+              </div>
+              <div class="autor" id="receta-autor"></div>
+            </div>
+            <div class="receta-acciones">
+              <!-- 
+              <button class="btn-accion guardar" id="btn-guardar">
+                <i class="far fa-heart"></i> Favorito
+              </button>
+              <button class="btn-accion" id="btn-compartir">
+                <i class="fas fa-share-alt"></i> Compartir
+              </button>
+              -->
+            </div>
+          </div>
+          
+          <div class="seccion-receta">
+            <h2 class="seccion-titulo">
+              <i class="fas fa-list-ul"></i> Ingredientes
+            </h2>
+            <ul class="ingredientes-lista" id="ingredientes-lista">
+              <!-- Los ingredientes se cargarán aquí dinámicamente -->
+            </ul>
+          </div>
+          
+          <div class="seccion-receta">
+            <h2 class="seccion-titulo">
+              <i class="fas fa-utensils"></i> Preparación
+            </h2>
+            <ol class="instrucciones-lista" id="instrucciones-lista">
+              <!-- Las instrucciones se cargarán aquí dinámicamente -->
+            </ol>
+          </div>
+        </div>
+      </div>
+      
+      <a href="#" class="btn-volver" id="btn-volver-final">
+        <i class="fas fa-arrow-left"></i> <span id="volver-text">Volver a Recetas</span>
+      </a>
+    </div>
+    
+    <!-- Este div se mostrará cuando no se encuentre la receta -->
+    <div id="receta-no-encontrada" style="display: none;" class="not-found">
+      <i class="fas fa-exclamation-triangle"></i>
+      <h2>Receta no encontrada</h2>
+      <p>Lo sentimos, no pudimos encontrar la receta que estás buscando.</p>
+      <a href="home.html" class="btn-volver" style="margin-top: 1rem;">
+        <i class="fas fa-arrow-left"></i> Volver a Recetas
+      </a>
+    </div>
+    
+    <!-- Mensaje de carga -->
+    <div id="cargando" class="not-found">
+      <i class="fas fa-spinner"></i>
+      <h2>Cargando receta...</h2>
+      <p>Por favor, espera un momento mientras preparamos esta deliciosa receta.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Recetas en Casa - Todos los derechos reservados</p>
+  </footer>
+  
+  <script src="config.js"></script>
+  <script>
+    const apiBaseUrl = apiConfig.apiBaseUrl;
+  
+    // Verificar sesión activa y token válido
+    const usuarioGuardado = localStorage.getItem("usuario");
+    if (!usuarioGuardado) {
+      window.location.href = "index.html";
+    } else {
+      const usuario = JSON.parse(usuarioGuardado);
+      if (!usuario.token) {
+        window.location.href = "index.html";
+      }
+
+      try {
+        const tokenParts = usuario.token.split('.');
+        const payload = JSON.parse(atob(tokenParts[1]));
+        const exp = payload.exp;
+        const ahora = Math.floor(Date.now() / 1000);
+
+        if (exp < ahora) {
+          alert("Sesión expirada. Iniciá sesión nuevamente.");
+          localStorage.removeItem("usuario");
+          window.location.href = "index.html";
+        }
+      } catch (e) {
+        console.error("Error al verificar token:", e);
+        window.location.href = "index.html";
+      }
+    }
+    
+    // Función para determinar la página de origen y configurar navegación
+    function configurarNavegacion() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const referrer = urlParams.get('from') || document.referrer;
+      
+      let backPage = 'home.html';
+      let backText = 'Recetas';
+      
+      // Determinar de dónde viene el usuario
+      if (referrer.includes('favoritos.html') || urlParams.get('from') === 'favoritos') {
+        backPage = 'favoritos.html';
+        backText = 'Favoritos';
+      } else if (referrer.includes('misRecetas.html') || urlParams.get('from') === 'misRecetas') {
+        backPage = 'misRecetas.html';
+        backText = 'Mis Recetas';
+      } else if (referrer.includes('home.html') || urlParams.get('from') === 'home') {
+        backPage = 'home.html';
+        backText = 'Inicio';
+      }
+      
+      // Configurar breadcrumb
+      const breadcrumb = document.getElementById('breadcrumb');
+      const breadcrumbLink = document.getElementById('breadcrumb-link');
+      const breadcrumbText = document.getElementById('breadcrumb-text');
+      
+      breadcrumbLink.href = backPage;
+      breadcrumbText.textContent = backText;
+      breadcrumb.style.display = 'block';
+      
+      // Configurar botón volver final
+      const btnVolverFinal = document.getElementById('btn-volver-final');
+      const volverText = document.getElementById('volver-text');
+      
+      btnVolverFinal.href = backPage;
+      volverText.textContent = `Volver a ${backText}`;
+    }
+  
+    // Obtener el ID de la receta de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const recetaId = urlParams.get('id');
+  
+    if (!recetaId) {
+      // Si no hay ID, mostrar mensaje de error
+      document.getElementById('cargando').style.display = 'none';
+      document.getElementById('receta-no-encontrada').style.display = 'block';
+    } else {
+      cargarReceta(recetaId);
+    }
+  
+    async function cargarReceta(id) {
+      try {
+        const response = await fetch(`${apiBaseUrl}/recetas/${id}`);
+        if (!response.ok) throw new Error('Receta no encontrada');
+        const receta = await response.json();
+  
+        document.getElementById('cargando').style.display = 'none';
+        document.getElementById('receta-detalle').style.display = 'block';
+        
+        // Configurar navegación después de cargar la receta
+        configurarNavegacion();
+        
+        document.getElementById('receta-nombre').textContent = receta.nombre;
+        document.getElementById('receta-categoria').textContent = receta.categoria;
+        document.getElementById('receta-tiempo').textContent = receta.tiempo;
+  
+        const imagenPlaceholder = "https://www.kindpng.com/picc/m/79-798754_hoteles-y-centros-vacacionales-dish-placeholder-hd-png.png";
+        const imagenUrl = receta.imagen && receta.imagen.trim() !== "" 
+        ? receta.imagen 
+        : imagenPlaceholder;
+
+        document.getElementById('receta-imagen').style.backgroundImage = `url('${imagenUrl}')`;
+  
+        document.getElementById('receta-autor').innerHTML = receta.usuario_email
+          ? `<i class="fas fa-user-chef"></i> Creado por: ${receta.usuario_nombre || 'Usuario'}`
+          : '<i class="fas fa-users"></i> Receta de la comunidad';
+  
+        const ingredientesLista = document.getElementById('ingredientes-lista');
+        ingredientesLista.innerHTML = '';
+        const ingredientes = Array.isArray(receta.ingredientes)
+          ? receta.ingredientes
+          : receta.ingredientes.split(',');
+  
+        ingredientes.forEach(ingrediente => {
+          const li = document.createElement('li');
+          li.className = 'ingrediente-item';
+          li.textContent = ingrediente.trim();
+          ingredientesLista.appendChild(li);
+        });
+  
+        const instruccionesLista = document.getElementById('instrucciones-lista');
+        instruccionesLista.innerHTML = '';
+        let instrucciones = receta.pasos || receta.instrucciones || "No hay instrucciones disponibles.";
+  
+        if (typeof instrucciones === 'string') {
+          instrucciones.split(/\d+\.\s|\n/).forEach(instr => {
+            if (instr.trim()) {
+              const li = document.createElement('li');
+              li.className = 'instruccion-item';
+              li.textContent = instr.trim();
+              instruccionesLista.appendChild(li);
+            }
+          });
+        } else if (Array.isArray(instrucciones)) {
+          instrucciones.forEach(instr => {
+            const li = document.createElement('li');
+            li.className = 'instruccion-item';
+            li.textContent = instr;
+            instruccionesLista.appendChild(li);
+          });
+        }
+  
+      } catch (error) {
+        console.error('Error al cargar la receta:', error);
+        document.getElementById('cargando').style.display = 'none';
+        document.getElementById('receta-no-encontrada').style.display = 'block';
+      }
+    }
+
+    // Función para obtener el email del usuario
+    function getUserEmail() {
+      const savedUser = localStorage.getItem('usuario');
+      if (!savedUser) return null;
+      const user = JSON.parse(savedUser);
+      return user.email;
+    }
+
+    async function logoutUsuario() {
+    const usuarioGuardado = localStorage.getItem("usuario");
+    
+    if (usuarioGuardado) {
+      try {
+        const usuario = JSON.parse(usuarioGuardado);
+        
+        // Si tenemos un access_token, intentar invalidarlo en el servidor
+        if (usuario.access_token) {
+          console.log('Intentando logout en servidor...');
+          
+          const response = await fetch(`${apiBaseUrl}/logout`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              access_token: usuario.access_token
+            })
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            console.log('Logout exitoso en servidor:', result.mensaje);
+          } else {
+            console.warn('Error al hacer logout en servidor, pero continuando con logout local');
+          }
+        }
+      } catch (error) {
+        console.error('Error durante logout:', error);
+      }
+    }
+
+    // Limpiar localStorage
+    localStorage.removeItem("usuario");
+    alert("Sesión cerrada correctamente");
+    window.location.href = "index.html";
+  }
+
+  // Actualizar el link de salir
+  document.addEventListener('DOMContentLoaded', function() {
+    const salirLinks = document.querySelectorAll('nav a[href="index.html"]');
+    salirLinks.forEach(link => {
+      if (link.textContent.trim() === 'Salir') {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          logoutUsuario();
+        });
+      }
+    });
+  });
+  </script>
+  
+</body>
+</html>
